@@ -437,9 +437,16 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
-    var compareFunction = function(a, b) {
-      return a[iterator] - b[iterator];
-    };
+    if (typeof iterator === 'function') {
+      var compareFunction = function(a, b) {
+        return iterator(a) - iterator(b);
+      };
+    } else {
+      var compareFunction = function(a, b) {
+        return a[iterator] - b[iterator];
+      };
+    }
+    
     return collection.sort(compareFunction);
 
   };

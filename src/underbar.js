@@ -386,6 +386,26 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    // var copyArray = array.slice(0);
+
+    // for (var i = 0; i < array.length; i++) {
+    //   var randomIndex = Math.floor(Math.random() * array.length);
+    //   var tempVal = copyArray[i];
+    //   copyArray[i] = copyArray[randomIndex];
+    //   copyArray[randomIndex] = tempVal;
+    // }
+    // return copyArray;
+
+    var shuff = [];
+    var copy = array.slice(0);
+    
+    for (let i = 0; i < array.length; i++) {
+      let rand = Math.floor(Math.random() * copy.length);
+      shuff[shuff.length] = copy[rand];
+      copy.splice(rand, 1);
+      
+    }
+    return shuff;
   };
 
 
@@ -400,6 +420,16 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    var argArray = Array.prototype.slice.call(arguments, 2);
+    var result = []; 
+    _.each(collection, function(value) {
+      if (typeof functionOrKey === 'function') {
+        result.push(functionOrKey.apply(value, argArray));   
+      } else {
+        result.push(value[functionOrKey]());   
+      }
+    } );
+    return result;
   };
 
   // Sort the object's values by a criterion produced by an iterator.
@@ -407,6 +437,11 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    var compareFunction = function(a, b) {
+      return a[iterator] - b[iterator];
+    };
+    return collection.sort(compareFunction);
+
   };
 
   // Zip together two or more arrays with elements of the same index
